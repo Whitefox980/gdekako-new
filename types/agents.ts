@@ -3,5 +3,5 @@ export interface Agent {
   ime: string;
   opis: string;
   slike: string[];
-  relevantnost?: number;
-}}
+  relevantnost?: number; // <<< OVO DODAJ
+}
