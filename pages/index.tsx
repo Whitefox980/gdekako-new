@@ -1,6 +1,7 @@
 ;import React, { useState } from 'react';
 import { useEffect, useRef } from 'react';
-import Image from 'next/image'; import agents from '@/data/agents.json';
+import Image from 'next/image'; 
+import agents from '../data/agents.json'
 
 export default function Home() { const [audioPlayed, setAudioPlayed] = useState(false); const [showChat, setShowChat] = useState(false); const canvasRef = useRef<HTMLCanvasElement>(null);
 
