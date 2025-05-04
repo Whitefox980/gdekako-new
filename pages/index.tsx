@@ -1,74 +1,102 @@
-import Image from 'next/image'; import { useState } from 'react'; import agents from '@/data/agents.json';
+import { useEffect, useState } from 'react'
+import Image from 'next/image'
+import agents from '@/data/agents.json'
 
-export default function Home() { const [selectedAgent, setSelectedAgent] = useState(null);
+export default function Home() {
+  const [audioPlayed, setAudioPlayed] = useState(false)
+  const [showChat, setShowChat] = useState(false)
+  const [selectedAgent, setSelectedAgent] = useState<string | null>(null)
 
-const handleAgentClick = (agent) => { setSelectedAgent(agent); };
+  useEffect(() => {
+    const timer = setTimeout(() => setShowChat(true), 2000)
+    return () => clearTimeout(timer)
+  }, [])
 
-return ( <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center relative overflow-hidden"> {/* Operaterka */} <div className="relative z-10 flex flex-col items-center"> <div className="rounded-full overflow-hidden border-4 border-green-400 w-[300px] h-[300px]"> <Image src="/operator_live.png" alt="Operaterka" width={300} height={300} /> </div> <div className="mt-4 p-4 rounded-xl bg-white text-black w-[90vw] max-w-xl shadow-xl"> <p>Dobrodošli u pretragu Matrixa na gde-kako.rs način...</p> </div> </div>
+  const playSoundAndStart = () => {
+    if (!audioPlayed) {
+      const audio = new Audio('/sounds/dial.mp3')
+      audio.play()
+      setAudioPlayed(true)
+    }
+  }
 
-{/* Agent baloni */}
-  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-    {agents.map((agent, i) => {
-      const angle = (i / agents.length) * 2 * Math.PI;
-      const radius = 250 + (agent.relevantnost || 1) * 20;
-      const x = Math.cos(angle) * radius;
-      const y = Math.sin(angle) * radius;
-      const size = 120 + (agent.relevantnost || 1) * 10;
-
-      return (
-        <div
-          key={agent.id}
-          className="absolute flex flex-col items-center cursor-pointer pointer-events-auto"
-          onClick={() => handleAgentClick(agent)}
-          style={{
-            left: `calc(50% + ${x}px - ${size / 2}px)`,
-            top: `calc(50% + ${y}px - ${size / 2}px)`
-          }}
-        >
-          <div
-            className="rounded-full overflow-hidden border-2 border-white shadow-lg"
-            style={{ width: size, height: size }}
-          >
-            <Image src={agent.slike[0]} alt={agent.ime} width={size} height={size} />
-          </div>
-          <p className="text-sm mt-2 text-center max-w-[100px]">{agent.odgovor?.slice(0, 60) || 'Odgovor uskoro...'}</p>
+  return (
+    <div
+      onClick={playSoundAndStart}
+      className="min-h-screen bg-black text-white flex flex-col items-center justify-center relative overflow-hidden"
+    >
+      {!audioPlayed && (
+        <div className="text-center animate-pulse text-sm absolute top-5">
+          Dodirnite ekran za početak...
         </div>
-      );
-    })}
+      )}
 
-    {/* SVG linije */}
-    <svg className="absolute w-full h-full z-0">
-      {agents.map((_, i) => {
-        const angle = (i / agents.length) * 2 * Math.PI;
-        const radius = 250 + (_.relevantnost || 1) * 20;
-        const x = Math.cos(angle) * radius;
-        const y = Math.sin(angle) * radius;
-
-        return (
-          <line
-            key={i}
-            x1="50%" y1="50%"
-            x2={`calc(50% + ${x}px)`} y2={`calc(50% + ${y}px)`}
-            stroke="white"
-            strokeWidth="1"
+      <div className="relative w-full h-[80vh] flex items-center justify-center">
+        {/* Operator u centru */}
+        <div className="w-72 h-72 rounded-full border-4 border-green-400 flex items-center justify-center relative z-10">
+          <Image
+            src="/operator_live.png"
+            alt="Operaterka"
+            width={200}
+            height={200}
+            className="rounded-full"
           />
-        );
-      })}
-    </svg>
-  </div>
+        </div>
 
-  {/* Modal prikaz odgovora */}
-  {selectedAgent && (
-    <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
-      <div className="bg-white text-black p-6 rounded-xl max-w-xl w-[90vw] relative">
-        <button onClick={() => setSelectedAgent(null)} className="absolute top-2 right-4 text-xl">×</button>
-        <h2 className="text-xl font-bold mb-2">{selectedAgent.ime}</h2>
-        <p>{selectedAgent.odgovor}</p>
+        {/* Agenti u krugu */}
+        {showChat &&
+          agents.map((agent, i) => {
+            const angle = (i / agents.length) * 2 * Math.PI
+            const radius = 200
+            const x = radius * Math.cos(angle)
+            const y = radius * Math.sin(angle)
+            const isSelected = selectedAgent === agent.id
+            return (
+              <div
+                key={agent.id}
+                onClick={() => setSelectedAgent(agent.id)}
+                className={`absolute transition-all duration-300 cursor-pointer ${
+                  isSelected ? 'z-20 scale-110' : 'z-0'
+                }`}
+                style={{
+                  top: `calc(50% + ${y}px - 50px)`,
+                  left: `calc(50% + ${x}px - 50px)`
+                }}
+              >
+                <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-cyan-400">
+                  <Image
+                    src={agent.slike[0]}
+                    alt={agent.ime}
+                    width={96}
+                    height={96}
+                    className="rounded-full"
+                  />
+                </div>
+                <p className="text-center text-xs mt-1 w-24 truncate">
+                  {isSelected
+                    ? agent.opis
+                    : agent.opis.length > 40
+                    ? agent.opis.slice(0, 40) + '...'
+                    : agent.opis}
+                </p>
+              </div>
+            )
+          })}
       </div>
+
+      {/* Chat prikaz */}
+      {showChat && (
+        <div className="mt-6 p-4 rounded-2xl border border-gray-700 bg-[#111] max-w-xl text-center">
+          <p className="text-green-400 font-mono">
+            Dobro došli u pretragu Matrixa na gde-kako.rs način...
+          </p>
+          <input
+            type="text"
+            placeholder="Postavite pitanje..."
+            className="w-full mt-3 p-2 bg-black text-white border border-green-600 rounded-md"
+          />
+        </div>
+      )}
     </div>
-  )}
-</div>
-
-); }
-
-
+  )
+}
