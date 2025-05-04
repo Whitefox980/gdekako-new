@@ -1,0 +1,16 @@
+# Node
+node_modules/
+.next/
+out/
+
+# Env fajlovi
+.env*
+.env.local
+
+# Logs i privremeni podaci
+logs/
+*.log
+.DS_Store
+
+# OS fajlovi
+Thumbs.db
