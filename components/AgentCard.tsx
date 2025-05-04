@@ -1,8 +1,8 @@
-export default function AgentCard({ name, description }) {
+export default function AgentCard({ ime, opis }: { ime: string, opis: string }) {
   return (
     <div className="agent-card">
-      <h3>{name}</h3>
-      <p>{description}</p>
+      <h3>{ime}</h3>
+      <p>{opis}</p>
     </div>
   );
 }

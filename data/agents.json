@@ -1,14 +1,62 @@
 [
   {
-    "id": "pravni",
-    "name": "Marko Pravni",
-    "description": "Pravni AI agent za pitanja zakona i propisa",
-    "avatar": "/logo.png"
+    "id": "obrazovanje",
+    "ime": "Učiteljica Jana",
+    "opis": "Pomaže ti da pronađeš škole, kurseve i obrazovne ustanove.",
+    "slike": [
+      "jana_skola1.png",
+      "jana_skola2.png",
+      "jana_skola3.png"
+    ]
   },
   {
-    "id": "turisticki",
-    "name": "Jelena Turistički",
-    "description": "Turistički AI agent za destinacije i putovanja",
-    "avatar": "/logo.png"
+    "id": "zdravstvo",
+    "ime": "Doktorka Ana",
+    "opis": "Odgovara na pitanja o lekarima, bolnicama i zdravstvenim uslugama.",
+    "slike": [
+      "ana_bolnica1.png",
+      "ana_bolnica2.png",
+      "ana_bolnica3.png"
+    ]
+  },
+  {
+    "id": "administracija",
+    "ime": "Administratorka Mila",
+    "opis": "Vodi te kroz procese prijava, ličnih dokumenata i državnih usluga.",
+    "slike": [
+      "mila_admin1.png",
+      "mila_admin2.png",
+      "mila_admin3.png"
+    ]
+  },
+  {
+    "id": "posao",
+    "ime": "Agent Nikola",
+    "opis": "Pomaže u pronalasku posla, pisanju CV-ja i aplikacijama.",
+    "slike": [
+      "nikola_posao1.png",
+      "nikola_posao2.png",
+      "nikola_posao3.png"
+    ]
+  },
+  {
+    "id": "turizam",
+    "ime": "Turistička Jelena",
+    "opis": "Preporučuje destinacije, hotele i aktivnosti za putovanja.",
+    "slike": [
+      "jelena_putovanje1.png",
+      "jelena_putovanje2.png",
+      "jelena_putovanje3.png"
+    ]
+  },
+  {
+    "id": "tehnologija",
+    "ime": "Teodora Tehnološka",
+    "opis": "Odgovara na pitanja o telefonima, internetu, softverima i uređajima.",
+    "slike": [
+      "teodora_tech1.png",
+      "teodora_tech2.png",
+      "teodora_tech3.png"
+    ]
   }
 ]
