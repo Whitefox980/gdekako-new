@@ -1,4 +1,4 @@
-import { agents } from '@/data/agents.json'
+import agents from '@/data/agents.json'
 
 export function odrediAgenta(upit: string) {
   const lower = upit.toLowerCase()
