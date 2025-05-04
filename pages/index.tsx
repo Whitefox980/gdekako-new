@@ -1,30 +1,72 @@
-import { useState } from "react"; import Image from "next/image";
+import Image from 'next/image'; import { useState } from 'react'; import agents from '@/data/agents.json';
 
-const agents = [ { name: "Marko Pravni", image: "/images/agents/marko.png", preview: "Za raskid ugovora o zakupu...", full: "Za raskid ugovora o zakupu potrebno je..." }, { name: "Jelena Turistički", image: "/images/agents/jelena.png", preview: "Za putovanje u Grčku...", full: "Za putovanje u Grčku potrebno vam je..." }, { name: "Teodora Tehnološka", image: "/images/agents/teodora.png", preview: "Najbolji budžetski telefon...", full: "Najbolji budžetski telefon trenutno na tržištu je..." } ];
+export default function Home() { const [selectedAgent, setSelectedAgent] = useState(null);
 
-export default function Home() { const [selected, setSelected] = useState(null);
+const handleAgentClick = (agent) => { setSelectedAgent(agent); };
 
-return ( <div className="relative min-h-screen bg-black text-green-400 font-mono overflow-hidden"> <div className="absolute inset-0 bg-[url('/images/matrix-bg.jpg')] bg-cover opacity-10 z-0" /> <div className="relative z-10 flex flex-col items-center pt-10 space-y-6"> <div className="rounded-full border-4 border-green-500 p-2 w-[300px] h-[300px] overflow-hidden"> <Image src="/images/operator_live.png" alt="Operator" width={300} height={300} className="rounded-full" /> </div> <div className="bg-black/60 rounded-xl p-4 w-full max-w-lg"> <input
-type="text"
-placeholder="Unesite pitanje..."
-className="w-full p-3 rounded bg-black border border-green-500 text-green-400 placeholder-green-600"
-/> </div>
+return ( <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center relative overflow-hidden"> {/* Operaterka */} <div className="relative z-10 flex flex-col items-center"> <div className="rounded-full overflow-hidden border-4 border-green-400 w-[300px] h-[300px]"> <Image src="/operator_live.png" alt="Operaterka" width={300} height={300} /> </div> <div className="mt-4 p-4 rounded-xl bg-white text-black w-[90vw] max-w-xl shadow-xl"> <p>Dobrodošli u pretragu Matrixa na gde-kako.rs način...</p> </div> </div>
 
-<div className="flex flex-wrap justify-center gap-6 px-4 pt-6">
-      {agents.map((agent, idx) => (
+{/* Agent baloni */}
+  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+    {agents.map((agent, i) => {
+      const angle = (i / agents.length) * 2 * Math.PI;
+      const radius = 250 + (agent.relevantnost || 1) * 20;
+      const x = Math.cos(angle) * radius;
+      const y = Math.sin(angle) * radius;
+      const size = 120 + (agent.relevantnost || 1) * 10;
+
+      return (
         <div
-          key={idx}
-          className={`flex flex-col items-center cursor-pointer transition-transform duration-300 ${selected === idx ? "scale-110" : "hover:scale-105"}`}
-          onClick={() => setSelected(selected === idx ? null : idx)}
+          key={agent.id}
+          className="absolute flex flex-col items-center cursor-pointer pointer-events-auto"
+          onClick={() => handleAgentClick(agent)}
+          style={{
+            left: `calc(50% + ${x}px - ${size / 2}px)`,
+            top: `calc(50% + ${y}px - ${size / 2}px)`
+          }}
         >
-          <div className={`rounded-full border-4 border-green-500 overflow-hidden ${selected === idx ? "w-40 h-40" : "w-24 h-24"}`}>
-            <Image src={agent.image} alt={agent.name} width={160} height={160} className="object-cover w-full h-full" />
+          <div
+            className="rounded-full overflow-hidden border-2 border-white shadow-lg"
+            style={{ width: size, height: size }}
+          >
+            <Image src={agent.slike[0]} alt={agent.ime} width={size} height={size} />
           </div>
-          <p className="text-sm mt-2 text-center max-w-[120px]">{selected === idx ? agent.full : agent.preview}</p>
+          <p className="text-sm mt-2 text-center max-w-[100px]">{agent.odgovor?.slice(0, 60) || 'Odgovor uskoro...'}</p>
         </div>
-      ))}
-    </div>
+      );
+    })}
+
+    {/* SVG linije */}
+    <svg className="absolute w-full h-full z-0">
+      {agents.map((_, i) => {
+        const angle = (i / agents.length) * 2 * Math.PI;
+        const radius = 250 + (_.relevantnost || 1) * 20;
+        const x = Math.cos(angle) * radius;
+        const y = Math.sin(angle) * radius;
+
+        return (
+          <line
+            key={i}
+            x1="50%" y1="50%"
+            x2={`calc(50% + ${x}px)`} y2={`calc(50% + ${y}px)`}
+            stroke="white"
+            strokeWidth="1"
+          />
+        );
+      })}
+    </svg>
   </div>
+
+  {/* Modal prikaz odgovora */}
+  {selectedAgent && (
+    <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
+      <div className="bg-white text-black p-6 rounded-xl max-w-xl w-[90vw] relative">
+        <button onClick={() => setSelectedAgent(null)} className="absolute top-2 right-4 text-xl">×</button>
+        <h2 className="text-xl font-bold mb-2">{selectedAgent.ime}</h2>
+        <p>{selectedAgent.odgovor}</p>
+      </div>
+    </div>
+  )}
 </div>
 
 ); }
