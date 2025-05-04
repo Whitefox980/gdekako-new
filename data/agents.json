@@ -1,44 +1,8 @@
 [
-  {
-    "id": "pravni",
-    "ime": "Marko Pravni",
-    "opis": "Pruža odgovore iz oblasti prava i administracije.",
-    "slike": ["/images/agent_pravni.png"]
-  },
-  {
-    "id": "turisticki",
-    "ime": "Jelena Turistički",
-    "opis": "Saveti o putovanjima, destinacijama i letovanjima.",
-    "slike": ["/images/agent_turisticki.png"]
-  },
-  {
-    "id": "tehnoloski",
-    "ime": "Teodora Tehnološka",
-    "opis": "Pomaže oko uređaja, aplikacija i digitalnog sveta.",
-    "slike": ["/images/agent_tehnoloski.png"]
-  },
-  {
-    "id": "zdravstvo",
-    "ime": "Dr Ana Zdravlje",
-    "opis": "Daje informacije o lekovima, lekarima i zdravstvenim uslugama.",
-    "slike": ["/images/agent_zdravstvo.png"]
-  },
-  {
-    "id": "obrazovanje",
-    "ime": "Učiteljica Mina",
-    "opis": "Vodi vas kroz školovanje, kurseve i studije.",
-    "slike": ["/images/agent_obrazovanje.png"]
-  },
-  {
-    "id": "posao",
-    "ime": "Ivan Poslovni",
-    "opis": "Pretraga oglasa za posao, priprema CV-ja i saveti.",
-    "slike": ["/images/agent_posao.png"]
-  },
-  {
-    "id": "administracija",
-    "ime": "Sanja Šalter",
-    "opis": "Rešava dileme oko dokumenata, prijava i državnih službi.",
-    "slike": ["/images/agent_admin.png"]
-  }
+  { "id": "zdravstvo", "ime": "Ivana", "opis": "AI za zdravstvo", "slike": ["ivana.png"] },
+  { "id": "obrazovanje", "ime": "Ana", "opis": "AI za obrazovanje", "slike": ["ana.png"] },
+  { "id": "administracija", "ime": "Sanja", "opis": "AI za administraciju", "slike": ["sanja.png"] },
+  { "id": "posao", "ime": "Nemanja", "opis": "AI za posao", "slike": ["nemanja.png"] },
+  { "id": "turizam", "ime": "Turizam", "opis": "AI za turizam", "slike": ["turizam.png"] },
+  { "id": "tehnologija", "ime": "Teodora", "opis": "AI za tehnologiju", "slike": ["teodora.png"] }
 ]
