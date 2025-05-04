@@ -1,101 +1,60 @@
-import { useEffect, useState } from 'react'
+// pages/index.tsx
+import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 
 export default function Home() {
-  const [step, setStep] = useState(0)
+  const [showOperator, setShowOperator] = useState(false)
+  const [showChat, setShowChat] = useState(false)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+  const clickedRef = useRef(false)
+
+  const handleStart = () => {
+    if (clickedRef.current) return
+    clickedRef.current = true
+
+    // Pusti zvuk
+    if (audioRef.current) {
+      audioRef.current.play().catch(err => console.error('Autoplay error:', err))
+
+      audioRef.current.onended = () => {
+        setShowOperator(true)
+        setTimeout(() => setShowChat(true), 1000) // Mali delay pre chata
+      }
+    }
+  }
 
   useEffect(() => {
-    const dial = new Audio('/sounds/dial.mp3')
-    dial.play()
-    const sequence = [1000, 1000, 1000, 1500, 1000]
-    let total = 0
-
-    sequence.forEach((delay, index) => {
-      setTimeout(() => setStep(index + 1), total)
-      total += delay
-    })
-
-    setTimeout(() => setStep(99), total + 500)
+    document.body.addEventListener('click', handleStart)
+    return () => document.body.removeEventListener('click', handleStart)
   }, [])
 
   return (
-    <div style={{
-      position: 'relative',
-      backgroundColor: 'black',
-      color: 'lime',
-      fontFamily: 'monospace',
-      minHeight: '100vh',
-      overflow: 'hidden',
-    }}>
-      <MatrixRain />
+    <div style={{ minHeight: '100vh', backgroundColor: 'black', color: 'white', textAlign: 'center', paddingTop: 50 }}>
+      <audio ref={audioRef} src="/sounds/dial.mp3" preload="auto" />
+      
+      {showOperator && (
+        <div style={{ opacity: 1, transition: 'opacity 1s' }}>
+          <Image
+            src="/operator_live.png"
+            alt="Operaterka"
+            width={300}
+            height={300}
+            style={{ borderRadius: '50%', border: '2px solid green' }}
+          />
+          <h2 style={{ marginTop: 20 }}>Dobrodošli u Matrix gde-kako.rs</h2>
+        </div>
+      )}
 
-      <div style={{
-        position: 'absolute',
-        top: 0, left: 0, right: 0, bottom: 0,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        zIndex: 10,
-      }}>
-        {step < 99 && <div>
-          <p>Biranje veze...</p>
-          <p style={{ fontSize: 30 }}>{'.'.repeat(step)}</p>
-        </div>}
-
-        {step === 99 && (
-          <div style={{ textAlign: 'center' }}>
-            <Image src="/images/operator.png" alt="Operator" width={200} height={200} />
-            <p style={{ marginTop: 20 }}>Dobrodošli u <b>Matrix</b></p>
-            <p>Veza sa sistemom <b>gde-kako.rs</b> je uspostavljena.</p>
-          </div>
-        )}
-      </div>
+      {showChat && (
+        <div style={{ marginTop: 30 }}>
+          {/* Ovde ubaci svoju Chat komponentu */}
+          <input
+            type="text"
+            placeholder="Unesi svoje pitanje..."
+            style={{ padding: 10, width: '80%', maxWidth: 400, borderRadius: 8 }}
+          />
+        </div>
+      )}
     </div>
   )
-}
-
-function MatrixRain() {
-  return (
-    <canvas id="matrixCanvas" style={{
-      position: 'absolute',
-      top: 0, left: 0,
-      width: '100%',
-      height: '100%',
-      zIndex: 1,
-      pointerEvents: 'none',
-    }} />
-  )
-}
-
-if (typeof window !== 'undefined') {
-  setTimeout(() => {
-    const canvas = document.getElementById('matrixCanvas') as HTMLCanvasElement
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')
-    canvas.width = window.innerWidth
-    canvas.height = window.innerHeight
-
-    const letters = 'アァイィウエカサシスセタチッツナニハヒフヘホマミムメモヤユヨラリルレロワンABCDEFGHIJKLMNOPQRSTUVWXYZ123456789'.split('')
-    const fontSize = 16
-    const columns = canvas.width / fontSize
-    const drops: number[] = []
-    for (let x = 0; x < columns; x++) drops[x] = 1
-
-    function draw() {
-      if (!ctx) return
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'
-      ctx.fillRect(0, 0, canvas.width, canvas.height)
-      ctx.fillStyle = '#0F0'
-      ctx.font = fontSize + 'px monospace'
-      for (let i = 0; i < drops.length; i++) {
-        const text = letters[Math.floor(Math.random() * letters.length)]
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize)
-        if (drops[i] * fontSize > canvas.height || Math.random() > 0.975) drops[i] = 0
-        drops[i]++
-      }
-    }
-
-    setInterval(draw, 50)
-  }, 1000)
 }
