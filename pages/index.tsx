@@ -83,7 +83,7 @@ height={1000}
             }}
           >
             <Image
-              src={`/images/${agent.slika}`}
+              src={`/images/${agent.slike[0]}`}
               alt={agent.ime}
               width={120}
               height={120}
