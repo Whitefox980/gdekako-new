@@ -1,79 +1,32 @@
-import { useEffect, useRef, useState } from 'react'
-import Image from 'next/image'
+import { useState } from "react"; import Image from "next/image";
 
-export default function Home() {
-  const [showOperator, setShowOperator] = useState(false)
-  const [showChat, setShowChat] = useState(false)
-  const [ready, setReady] = useState(false)
-  const audioRef = useRef<HTMLAudioElement | null>(null)
+const agents = [ { name: "Marko Pravni", image: "/images/agents/marko.png", preview: "Za raskid ugovora o zakupu...", full: "Za raskid ugovora o zakupu potrebno je..." }, { name: "Jelena Turistički", image: "/images/agents/jelena.png", preview: "Za putovanje u Grčku...", full: "Za putovanje u Grčku potrebno vam je..." }, { name: "Teodora Tehnološka", image: "/images/agents/teodora.png", preview: "Najbolji budžetski telefon...", full: "Najbolji budžetski telefon trenutno na tržištu je..." } ];
 
-  useEffect(() => {
-    const tryAutoPlay = () => {
-      if (audioRef.current) {
-        audioRef.current.playbackRate = 1.5
-        audioRef.current.play()
-          .then(() => {
-            audioRef.current!.onended = () => {
-              setShowOperator(true)
-              setTimeout(() => setShowChat(true), 1000)
-            }
-            setReady(true)
-          })
-          .catch(() => {
-            // Ako autoplay ne uspe, traži klik
-            setReady(false)
-          })
-      }
-    }
+export default function Home() { const [selected, setSelected] = useState(null);
 
-    tryAutoPlay()
-    const listener = () => {
-      if (audioRef.current && !ready) {
-        audioRef.current.playbackRate = 1.5
-        audioRef.current.play().then(() => {
-          audioRef.current!.onended = () => {
-            setShowOperator(true)
-            setTimeout(() => setShowChat(true), 1000)
-          }
-          setReady(true)
-        })
-      }
-    }
-    document.body.addEventListener('click', listener)
+return ( <div className="relative min-h-screen bg-black text-green-400 font-mono overflow-hidden"> <div className="absolute inset-0 bg-[url('/images/matrix-bg.jpg')] bg-cover opacity-10 z-0" /> <div className="relative z-10 flex flex-col items-center pt-10 space-y-6"> <div className="rounded-full border-4 border-green-500 p-2 w-[300px] h-[300px] overflow-hidden"> <Image src="/images/operator_live.png" alt="Operator" width={300} height={300} className="rounded-full" /> </div> <div className="bg-black/60 rounded-xl p-4 w-full max-w-lg"> <input
+type="text"
+placeholder="Unesite pitanje..."
+className="w-full p-3 rounded bg-black border border-green-500 text-green-400 placeholder-green-600"
+/> </div>
 
-    return () => document.body.removeEventListener('click', listener)
-  }, [ready])
-
-  return (
-    <div style={{ minHeight: '100vh', backgroundColor: 'black', color: 'white', textAlign: 'center', paddingTop: 50 }}>
-      <audio ref={audioRef} src="/sounds/dial.mp3" preload="auto" />
-      
-      {showOperator ? (
-        <div style={{ transition: 'opacity 1s' }}>
-          <Image
-            src="/operator_live.png"
-            alt="Operaterka"
-            width={300}
-            height={300}
-            style={{ borderRadius: '50%', border: '2px solid green' }}
-          />
-          <h2 style={{ marginTop: 20 }}>Dobrodošli u Matrix gde-kako.rs</h2>
+<div className="flex flex-wrap justify-center gap-6 px-4 pt-6">
+      {agents.map((agent, idx) => (
+        <div
+          key={idx}
+          className={`flex flex-col items-center cursor-pointer transition-transform duration-300 ${selected === idx ? "scale-110" : "hover:scale-105"}`}
+          onClick={() => setSelected(selected === idx ? null : idx)}
+        >
+          <div className={`rounded-full border-4 border-green-500 overflow-hidden ${selected === idx ? "w-40 h-40" : "w-24 h-24"}`}>
+            <Image src={agent.image} alt={agent.name} width={160} height={160} className="object-cover w-full h-full" />
+          </div>
+          <p className="text-sm mt-2 text-center max-w-[120px]">{selected === idx ? agent.full : agent.preview}</p>
         </div>
-      ) : !ready && (
-        <button style={{ padding: 20, fontSize: 18 }} onClick={() => {}}>
-          Klikni da započneš
-        </button>
-      )}
-
-      {showChat && (
-        <div style={{ marginTop: 30 }}>
-          <input
-            type="text"
-            placeholder="Unesi svoje pitanje..."
-            style={{ padding: 10, width: '80%', maxWidth: 400, borderRadius: 8 }}
-          />
-        </div>
-      )}
+      ))}
     </div>
-  )
-}
+  </div>
+</div>
+
+); }
+
+
