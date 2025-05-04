@@ -7,13 +7,9 @@ type LogEntry = {
   vreme: string;
 };
 
-export async function getServerSideProps() {
-  const logPath = path.join(process.cwd(), 'gdekako-agenti/logs/questions.json');
-  const raw = fs.existsSync(logPath) ? fs.readFileSync(logPath, 'utf8') : '[]';
-  const logs: LogEntry[] = JSON.parse(raw).reverse();
-  return { props: { logs } };
+export async function getStaticProps() {
+  // umesto getServerSideProps
 }
-
 export default function Dashboard({ logs }: { logs: LogEntry[] }) {
   return (
     <div style={{ padding: 32 }}>
