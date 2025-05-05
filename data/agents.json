@@ -1,8 +1,8 @@
 [
-  { "id": "zdravstvo", "ime": "Ivana", "opis": "AI za zdravstvo", "slike": ["ivana.png"] },
-  { "id": "obrazovanje", "ime": "Ana", "opis": "AI za obrazovanje", "slike": ["ana.png"] },
-  { "id": "administracija", "ime": "Sanja", "opis": "AI za administraciju", "slike": ["sanja.png"] },
-  { "id": "posao", "ime": "Nemanja", "opis": "AI za posao", "slike": ["nemanja.png"] },
-  { "id": "turizam", "ime": "Turizam", "opis": "AI za turizam", "slike": ["turizam.png"] },
-  { "id": "tehnologija", "ime": "Teodora", "opis": "AI za tehnologiju", "slike": ["teodora.png"] }
+  {"id": "zdravstvo", "ime": "Ivana", "opis": "Zdravstvena pitanja", "slike": ["/images/ivana.png"]},
+  {"id": "obrazovanje", "ime": "Ana", "opis": "Obrazovanje", "slike": ["/images/ana.png"]},
+  {"id": "administracija", "ime": "Sanja", "opis": "Administracija", "slike": ["/images/sanja.png"]},
+  {"id": "posao", "ime": "Nemanja", "opis": "Zapošljavanje", "slike": ["/images/nemanja.png"]},
+  {"id": "turizam", "ime": "Mila", "opis": "Turizam", "slike": ["/images/turizam.png"]},
+  {"id": "tehnologija", "ime": "Teodora", "opis": "Tehnološka podrška", "slike": ["/images/teodora.png"]}
 ]
