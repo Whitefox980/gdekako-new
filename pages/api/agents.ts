@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import type { Agent } from '@/types/agents'
+import type { Agent } from '../../types/agents'
 import agents from '@/data/agents.json'
 
 export default function handler(

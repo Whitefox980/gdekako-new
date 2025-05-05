@@ -1,19 +1,26 @@
+// agents/centralAgent.ts
 import agents from '@/data/agents.json'
 
-export default function centralAgent(input: string) {
-  const lower = input.toLowerCase()
+type Agent = {
+  id: string
+  ime: string
+  opis: string
+  slike: string[]
+}
 
-  if (lower.includes('pravni') || lower.includes('zakon')) return pronadji('pravni')
-  if (lower.includes('turizam') || lower.includes('letovanje')) return pronadji('turistički')
-  if (lower.includes('tehnologija') || lower.includes('ai')) return pronadji('tehnološka')
-  if (lower.includes('zdravstvo') || lower.includes('lekar')) return pronadji('zdravstveni')
-  if (lower.includes('administracija') || lower.includes('dokument')) return pronadji('administrativni')
-  if (lower.includes('škola') || lower.includes('učitelj')) return pronadji('obrazovni')
-  if (lower.includes('posao') || lower.includes('zaposlenje')) return pronadji('poslovni')
+export function getRelevantAgent(question: string): Agent {
+  const lower = question.toLowerCase()
 
-  return agents.find((a: { id: string }) => a.id === 'centralni') || agents[0]
+  if (lower.includes('zdravstvo')) return pronadji('zdravstvo')
+  if (lower.includes('obrazovanje')) return pronadji('obrazovanje')
+  if (lower.includes('administracija')) return pronadji('administracija')
+  if (lower.includes('posao')) return pronadji('posao')
+  if (lower.includes('turizam')) return pronadji('turizam')
+  if (lower.includes('tehnologija')) return pronadji('tehnologija')
 
-  function pronadji(ključ: string) {
-    return agents.find((a: { id: string }) => a.id.includes(ključ)) || agents[0]
+  return agents.find((a: Agent) => a.id === 'centralni') || agents[0]
+
+  function pronadji(ključ: string): Agent {
+    return agents.find((a: Agent) => a.id.includes(ključ)) || agents[0]
   }
 }
