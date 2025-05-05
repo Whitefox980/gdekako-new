@@ -1,30 +1,34 @@
+
+from setuptools import setup
 import os
 
-def create_file(path):
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, 'w', encoding='utf-8') as f:
-        f.write('')
+def create_file(path, content=""):
+    if os.path.dirname(path):
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, 'w') as f:
+        f.write(content)
+
+project_files = {
+    "public/images/operator.png": "",
+    "public/images/ivana.png": "",
+    "public/images/ana.png": "",
+    "public/images/sanja.png": "",
+    "public/images/mila.png": "",
+    "public/images/teodora.png": "",
+    "public/images/lisica.png": "",
+    "public/sounds/dial.mp3": "",
+    "public/sounds/glitch.wav": "",
+    "styles/globals.css": "body { background: black; color: white; font-family: sans-serif; }",
+    "pages/index.tsx": "// React index page with layout (to be filled in)",
+    "next.config.js": "module.exports = { output: 'export' }",
+    "package.json": "{\n  \"scripts\": { \"dev\": \"next dev\", \"build\": \"next build\", \"start\": \"next start\" }\n}",
+    "tsconfig.json": "{\n  \"compilerOptions\": { \"jsx\": \"preserve\", \"esModuleInterop\": true }\n}"
+}
 
 def create_structure():
-    create_file('gdekako-ui/public/images/ana.png')
-    create_file('gdekako-ui/public/images/ivana.png')
-    create_file('gdekako-ui/public/images/sanja.png')
-    create_file('gdekako-ui/public/images/teodora.png')
-    create_file('gdekako-ui/public/images/nemanja.png')
-    create_file('gdekako-ui/public/images/operator_live.png')
-    create_file('gdekako-ui/public/images/turizam.png')
-    create_file('gdekako-ui/public/images/lisica.png')
-    create_file('gdekako-ui/public/sounds/dial.mp3')
-    create_file('gdekako-ui/public/sounds/glitch.wav')
-    create_file('gdekako-ui/public/backgrounds/matrix-bg.jpg')
-    create_file('gdekako-ui/styles/globals.css')
-    create_file('gdekako-ui/pages/index.tsx')
-    create_file('gdekako-ui/pages/agent.tsx')
-    create_file('gdekako-ui/components/Chat.tsx')
-    create_file('gdekako-ui/components/AgentBubble.tsx')
-    create_file('gdekako-ui/components/AgentCard.tsx')
-    create_file('gdekako-ui/data/agents.json')
-    create_file('gdekako-ui/utils/relevance.ts')
+    for path, content in project_files.items():
+        create_file(path, content)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     create_structure()
+
