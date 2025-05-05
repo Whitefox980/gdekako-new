@@ -1,8 +1,7 @@
 {
-  
-    "compilerOptions": {
+   "compilerOptions": {
     "baseUrl": ".",
-    "paths": 
+    "paths":,
     "@/*": ["./*"],
     "target": "ES6",
     "lib": ["dom", "dom.iterable", "esnext"],
