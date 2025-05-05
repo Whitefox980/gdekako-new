@@ -1,27 +1,14 @@
+
 body {
   margin: 0;
-  font-family: monospace;
-  background-color: black;
+  font-family: 'Segoe UI', sans-serif;
+  background: #000;
   color: white;
 }
-@keyframes matrix {
-  0% { background-position: 0 0; }
-  100% { background-position: 0 1000px; }
-}
-.animate-matrix {
-  background-image: url('/images/matrix-bg.gif');
-  background-repeat: repeat;
+
+.matrix-bg {
+  background-image: url('/images/matrix-bg.jpg');
   background-size: cover;
-  animation: matrix 30s linear infinite;
-  opacity: 0.3;
-}
-.animate-fade-in { animation: fade-in 1.5s ease-in-out forwards; }
-@keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-.animate-slide-up { animation: slide-up 1s ease-out; }
-@keyframes slide-up {
-  from { transform: translateY(30px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  background-attachment: fixed;
+  opacity: 0.95;
 }

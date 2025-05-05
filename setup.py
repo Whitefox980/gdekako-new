@@ -1,4 +1,12 @@
+import os
 
+def create_file(path, content):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, 'w', encoding='utf-8') as f:
+        f.write(content)
+
+files = {
+    'pages/index.tsx': '''
 import { useState } from 'react'
 import ChatForm from '@/components/ChatForm'
 import Image from 'next/image'
@@ -45,3 +53,58 @@ export default function Home() {
     </div>
   )
 }
+''',
+
+    'components/ChatForm.tsx': '''
+interface Props {
+  pitanje: string
+  setPitanje: (v: string) => void
+  onSubmit: () => void
+  loading: boolean
+}
+
+export default function ChatForm({ pitanje, setPitanje, onSubmit, loading }: Props) {
+  return (
+    <div className="flex gap-2 mt-6 w-full max-w-xl">
+      <input
+        type="text"
+        value={pitanje}
+        onChange={(e) => setPitanje(e.target.value)}
+        className="flex-1 px-4 py-2 rounded-l-xl border border-green-400 text-black"
+        placeholder="Postavite pitanje..."
+      />
+      <button
+        onClick={onSubmit}
+        className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-r-xl"
+        disabled={loading}
+      >
+        {loading ? '...čeka se' : 'Pitaj'}
+      </button>
+    </div>
+  )
+}
+''',
+
+    'styles/globals.css': '''
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #000;
+  color: white;
+}
+
+.matrix-bg {
+  background-image: url('/images/matrix-bg.jpg');
+  background-size: cover;
+  background-attachment: fixed;
+  opacity: 0.95;
+}
+''',
+}
+
+def create_structure():
+    for path, content in files.items():
+        create_file(path, content)
+
+if __name__ == '__main__':
+    create_structure()
