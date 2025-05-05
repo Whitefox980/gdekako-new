@@ -1,1 +1,32 @@
-body { background: black; color: white; font-family: sans-serif; }
+body {
+  background: url('your-matrix-background-image-url') no-repeat center center fixed;
+  background-size: cover;
+  animation: backgroundAnimation 10s infinite linear;
+}
+
+@keyframes backgroundAnimation {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.agent-circle {
+  border-radius: 50%;
+  display: inline-block;
+  transition: transform 0.3s ease;
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+}
+
+.agent-circle:hover {
+  transform: scale(1.1);
+}
+
+.agent-response {
+  display: inline-block;
+  animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}

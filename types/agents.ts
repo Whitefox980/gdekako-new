@@ -1,7 +1,6 @@
-export interface Agent {
-  id: string;
-  ime: string;
-  opis: string;
-  slike: string[];
-  relevantnost?: number; // <<< OVO DODAJ
+export type Agent = {
+  id: string
+  ime: string
+  opis: string
+  slike: string[]
 }
