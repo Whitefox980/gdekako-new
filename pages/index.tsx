@@ -1,20 +1,70 @@
- import Image from 'next/image'; import { useEffect, useState } from 'react'; import agentsData from '@/data/agents.json'; import backgroundImage from '@/public/images/matrix_bg.png'; import operatorImage from '@/public/images/operator_live.png';
+import { useState } from 'react'
+import Image from 'next/image'
+import agents from '@/data/agents.json'
 
-export default function Home() { const [showWelcome, setShowWelcome] = useState(true); const [questionAsked, setQuestionAsked] = useState(false);
+export default function Home() {
+  const [responses, setResponses] = useState([])
 
-useEffect(() => { const timeout = setTimeout(() => setShowWelcome(false), 4000); const dialAudio = new Audio('/sounds/dial.mp3'); dialAudio.playbackRate = 1.8; dialAudio.play(); return () => clearTimeout(timeout); }, []);
+  const handleAsk = async () => {
+    const res = await fetch('/api/multirezon', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pitanje: 'Gde mogu da vadim dokumenta u Novom Sadu?' })
+    })
+    const data = await res.json()
+    setResponses(data.odgovori)
+  }
 
-const handleAsk = () => { setQuestionAsked(true); const glitchAudio = new Audio('/sounds/glitch.wav'); glitchAudio.play(); };
+  return (
+    <div className="min-h-screen bg-black bg-opacity-90 text-white font-mono relative overflow-hidden">
+      {/* Matrix background */}
+      <div className="absolute inset-0 z-0 opacity-30">
+        <Image src="/images/matrix-bg.png" alt="Matrix background" fill className="object-cover" priority />
+      </div>
 
-return ( <div className="min-h-screen bg-black relative text-white"> <Image
-src={backgroundImage}
-alt="Matrix background"
-layout="fill"
-objectFit="cover"
-className="opacity-30 -z-10"
-/> {showWelcome ? ( <div className="flex flex-col items-center justify-center h-screen"> <p className="text-lg tracking-widest text-green-400 animate-pulse"> Uspostavljanje veze sa Centralom... </p> </div> ) : ( <div className="flex flex-col items-center py-6"> <Image src={operatorImage} alt="Operaterka" width={300} height={300} className={rounded-full shadow-xl transition-opacity duration-700 ${questionAsked ? 'opacity-80 animate-pulse' : 'opacity-100'}} /> <p className="text-center mt-4 text-green-300 text-xl"> -- Dobro Došli u AI svet -- <br /> gde-kako.rs <br /> Odgovora na pitanja <br /> Specijalnih AI Agenata </p> {!questionAsked && ( <button
-onClick={handleAsk}
-className="mt-6 px-4 py-2 bg-green-600 text-white rounded-full shadow-md hover:bg-green-700"
-> PITAJ </button> )} <div className="flex flex-row flex-wrap justify-center gap-4 mt-8"> {agentsData.map((agent) => ( <div key={agent.id} className={flex flex-col items-center transition-all duration-700 ease-in-out  ${questionAsked ? 'opacity-100' : 'opacity-40'} } > <Image src={/images/${agent.slika}} alt={agent.ime} width={questionAsked ? 120 : 80} height={questionAsked ? 120 : 80} className="rounded-full shadow-lg" /> <span className="mt-2 text-sm text-center text-green-300">{agent.ime}</span> </div> ))} </div> </div> )} </div> ); }
+      {/* Chat and Operator */}
+      <div className="relative z-10 flex flex-col items-center pt-10">
+        <div className="w-[300px] h-[300px] rounded-full overflow-hidden border-4 border-green-500 shadow-lg animate-pulse bg-black bg-opacity-60">
+          <Image src="/images/operator_live.png" alt="Operaterka" width={300} height={300} />
+        </div>
+        <div className="mt-4 text-center text-lg leading-tight">
+          <p className="text-green-300 font-bold">Dobro Došli u AI Svet</p>
+          <p className="text-white">Gde-Kako.rs</p>
+          <p className="text-sm text-gray-300">Odgovora na pitanja specijalnih AI agenata</p>
+        </div>
+        <button onClick={handleAsk} className="mt-6 px-6 py-2 rounded-full bg-green-600 hover:bg-green-500 text-white font-bold shadow-md">
+          PITAJ
+        </button>
+      </div>
 
+      {/* Agents Preview */}
+      <div className="relative z-10 mt-10 flex flex-wrap justify-center gap-6 px-4">
+        {agents.map(agent => {
+          const answer = responses.find(r => r.agentId === agent.id)
+          const hasResponse = !!answer
+          return (
+            <div
+              key={agent.id}
+              className={`relative flex flex-col items-center w-40 h-40 rounded-full shadow-lg border-2 p-2
+                ${hasResponse ? 'border-green-400 animate-pulse' : 'border-gray-600 opacity-30'}
+              `}
+            >
+              <Image
+                src={`/images/${agent.slika}`}
+                alt={agent.ime}
+                width={120}
+                height={120}
+                className="rounded-full"
+              />
+              <span className="text-xs mt-2 font-semibold">{agent.ime}</span>
+              {hasResponse && (
+                <p className="text-[10px] mt-1 text-center text-green-200">{answer.odgovor.slice(0, 40)}...</p>
+              )}
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
 
